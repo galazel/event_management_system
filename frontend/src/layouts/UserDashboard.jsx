@@ -1,27 +1,18 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, createContext } from "react";
 import { SearchIcon } from "lucide-react";
 import {
   InputGroup,
   InputGroupAddon,
   InputGroupInput,
 } from "@/components/ui/input-group";
-import {
-  Card,
-  CardAction,
-  CardContent,
-  CardDescription,
-  CardFooter,
-  CardHeader,
-  CardTitle,
-} from "@/components/ui/card";
+
 import { Combobox } from "../components/ui/checkbox";
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome";
-import {
-  faUser,
-  faCalendar,
-  faBookmark,
-} from "@fortawesome/free-regular-svg-icons";
-import { faExpand } from "@fortawesome/free-solid-svg-icons";
+import { faUser, faCalendar } from "@fortawesome/free-regular-svg-icons";
+import RegisteredEventsPage from "../components/user-registered-events";
+import EventsPage from "../components/events";
+import ProfilePage from "../components/profile";
+import useCarousel from "../hooks/useCarousel";
 
 const phrases = [
   "Join us for an unforgettable experience!",
@@ -31,34 +22,55 @@ const phrases = [
   "Experience moments that matter.",
 ];
 function UserDashboard() {
-  const [index, setIndex] = useState(0);
-  const [phrase, setPhrase] = useState(phrases[0]);
+  const [eventsPage, setEventsPage] = useState(true);
+  const [registeredEventsPage, setRegisteredEventsPage] = useState(false);
+  const [profilePage, setProfilePage] = useState(false);
 
-  useEffect(() => {
-    const timer = setTimeout(() => {
-      const nextIndex = (index + 1) % phrases.length;
-      setIndex(nextIndex);
-      setPhrase(phrases[nextIndex]);
-    }, 5000);
-
-    return () => clearTimeout(timer);
-  }, [index]);
+  const item = useCarousel(phrases);
+  const handleRegisteredEventsPage = () => {
+    setEventsPage(false);
+    setRegisteredEventsPage(true);
+    setProfilePage(false);
+  };
+  const handleProfilePage = () => {
+    setEventsPage(false);
+    setRegisteredEventsPage(false);
+    setProfilePage(true);
+  };
+  const handleEventsPage = () => {
+    setEventsPage(true);
+    setRegisteredEventsPage(false);
+    setProfilePage(false);
+  };
 
   return (
     <main className="h-screen flex flex-col gap-5 p-5">
       <header className="text-gray-600 body-font ">
         <div className="container mx-auto flex justify-between  p-5  md:flex-row items-center ">
           <a className="flex title-font font-medium items-center text-gray-900 mb-4 md:mb-0">
-            <img src="/uc-logo.png" alt="uc-logo" className="w-[5vw]" />
+            <img
+              src="/uc-logo.png"
+              alt="uc-logo"
+              className="w-[5vw]"
+              onClick={handleEventsPage}
+            />
           </a>
           <div>
-            <FontAwesomeIcon icon={faCalendar} className="text-3xl" />
-            <FontAwesomeIcon icon={faUser} className="text-3xl" />
+            <FontAwesomeIcon
+              icon={faCalendar}
+              className="text-3xl"
+              onClick={handleRegisteredEventsPage}
+            />
+            <FontAwesomeIcon
+              icon={faUser}
+              className="text-3xl"
+              onClick={handleProfilePage}
+            />
           </div>
         </div>
       </header>
       <section className="container mx-auto grid grid-rows-2 gap-10 p-5 md:flex-row items-center ">
-        <h1 className="text-center text-3xl">{phrase}</h1>
+        <h1 className="text-center text-5xl">{item}</h1>
         <div className="flex justify-between gap-10">
           <InputGroup className="w-[20vw]">
             <InputGroupInput placeholder=" Search event..." />
@@ -69,22 +81,9 @@ function UserDashboard() {
           <Combobox />
         </div>
         <div className="grid gap-5">
-          <Card>
-            <CardHeader>
-              <CardTitle>Card Title</CardTitle>
-              <CardDescription>Card Description</CardDescription>
-              <CardAction className="flex gap-1">
-                <FontAwesomeIcon icon={faBookmark} className="text-2xl" />
-                <FontAwesomeIcon icon={faExpand} className="text-2xl" />
-              </CardAction>
-            </CardHeader>
-            <CardContent>
-              <p>Card Content</p>
-            </CardContent>
-            <CardFooter>
-              <p>Card Footer</p>
-            </CardFooter>
-          </Card>
+          {eventsPage && <EventsPage />}
+          {registeredEventsPage && <RegisteredEventsPage />}
+          {profilePage && <ProfilePage />}
         </div>
       </section>
     </main>
