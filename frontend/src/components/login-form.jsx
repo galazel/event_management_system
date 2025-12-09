@@ -17,7 +17,7 @@ export function LoginForm({
 }) {
   const setRegistering = useContext(AccountContext)
   return (
-    <form className={cn("flex flex-col gap-6", className)} {...props}>
+    <form className={cn("flex flex-col gap-6 px-2", className)} {...props} >
       <FieldGroup>
         <div className="flex flex-col items-center gap-1 text-center">
           <h1 className="text-2xl font-bold">Login to your account</h1>
@@ -39,7 +39,7 @@ export function LoginForm({
           <Input id="password" type="password" required />
         </Field>
         <Field>
-          <Button type="submit" >Login</Button>
+          <Button type="submit">Login</Button>
         </Field>
         <Field>
           <FieldDescription className="text-center">
