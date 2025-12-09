@@ -25,22 +25,26 @@ function UserDashboard() {
   const [eventsPage, setEventsPage] = useState(true);
   const [registeredEventsPage, setRegisteredEventsPage] = useState(false);
   const [profilePage, setProfilePage] = useState(false);
+  const [isProfilePageSet, setIsProfilePageSet] = useState(false);
 
   const item = useCarousel(phrases);
   const handleRegisteredEventsPage = () => {
     setEventsPage(false);
     setRegisteredEventsPage(true);
     setProfilePage(false);
+     setIsProfilePageSet(false)
   };
   const handleProfilePage = () => {
     setEventsPage(false);
     setRegisteredEventsPage(false);
     setProfilePage(true);
+    setIsProfilePageSet(true)
   };
   const handleEventsPage = () => {
     setEventsPage(true);
     setRegisteredEventsPage(false);
     setProfilePage(false);
+     setIsProfilePageSet(false)
   };
 
   return (
@@ -70,16 +74,20 @@ function UserDashboard() {
         </div>
       </header>
       <section className="container mx-auto grid grid-rows-2 gap-10 p-5 md:flex-row items-center ">
-        <h1 className="text-center text-5xl">{item}</h1>
-        <div className="flex justify-between gap-10">
-          <InputGroup className="w-[20vw]">
-            <InputGroupInput placeholder=" Search event..." />
-            <InputGroupAddon>
-              <SearchIcon />
-            </InputGroupAddon>
-          </InputGroup>
-          <Combobox />
-        </div>
+        {!isProfilePageSet && (
+          <>
+            <h1 className="text-center text-5xl">{item}</h1>
+            <div className="flex justify-between gap-10">
+              <InputGroup className="w-[20vw]">
+                <InputGroupInput placeholder=" Search event..." />
+                <InputGroupAddon>
+                  <SearchIcon />
+                </InputGroupAddon>
+              </InputGroup>
+              <Combobox />
+            </div>
+          </>
+        )}
         <div className="grid gap-5">
           {eventsPage && <EventsPage />}
           {registeredEventsPage && <RegisteredEventsPage />}
